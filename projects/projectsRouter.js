@@ -1,8 +1,9 @@
 
 const express = require("express")
 const db = require("../projects/project-model")
-const { validateProjectId, validateProject } = require("../middleware/projects")
+const { validateProjectId, validateProject, validateProjectResourceId, validateResourceProjectsById } = require("../middleware/projects")
 const { validateResourcesId, validateResource } = require("../middleware/resources")
+const { validateTasksId } = require("../middleware/tasks")
 
 const router = express.Router()
 
@@ -32,6 +33,16 @@ router.get("/projects/:id", validateProjectId(), (req, res) => {
     } 
   });
 
+  // to get projects with different resources
+  router.get("/projects/:id/resources", validateProjectResourceId(), (req, res) => {
+    res.status(200).json(req.projectsResources);
+})
+
+  // to get resource from different projects
+  router.get("/resources/:id/projects", validateResourceProjectsById(), (req, res) => {
+    res.status(200).json(req.resourcesProjects);
+})
+
 // to get all resources
 router.get("/resources", async (req, res, next) => {
 	try {
@@ -57,6 +68,7 @@ router.post("/resources", validateResource(), async (req, res) => {
       next(error);
     } 
   });
+
 
 
 module.exports = router

@@ -16,6 +16,14 @@ function getTasksById(id) {
     .select([ "t.id as task_id", "t.task_description", "t.task_notes",  "t.completed", "p.project_name", "p.project_description"])
 }
 
+// to get a list of porject tasks
+function getTaskProjectsId(id) {
+    return db("tasks as t")
+    .innerJoin("projects as p", "p.id", "t.project_id")
+    .where("p.id", id)
+    .select(["p.id", "p.project_name", "t.id", "t.task_description"])
+}
+
 // to add a resource
 function insertTasks(tasks) {
     return db('tasks').insert(tasks).then((ids) => {
@@ -27,6 +35,7 @@ function insertTasks(tasks) {
 module.exports = {
   getTasks,
   getTasksById, 
+  getTaskProjectsId,
   insertTasks
 
 };

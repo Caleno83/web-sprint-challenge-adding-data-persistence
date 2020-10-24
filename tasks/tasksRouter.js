@@ -1,7 +1,7 @@
 
 const express = require("express")
 const db = require("../tasks/tasks-model")
-const { validateTask, validateTasksId } =require("../middleware/tasks")
+const { validateTask, validateTasksId , validateTaskProjectId } =require("../middleware/tasks")
 
 
 const router = express.Router()
@@ -21,6 +21,11 @@ router.get("/tasks", async (req, res, next) => {
 router.get("/tasks/:id", validateTasksId(), (req, res) => {
     res.status(200).json(req.tasks);
   });
+
+// to get projects with id to get all tasks
+    router.get("/tasks/:id/projects", validateTaskProjectId(), (req, res) => {
+        res.status(200).json(req.taskProjects);
+    })
 
 // to add a tasks
 router.post("/tasks", validateTask(), async (req, res, next) => {

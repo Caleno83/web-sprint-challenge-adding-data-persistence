@@ -22,6 +22,28 @@ function validateTasksId() {
       };
     }
 
+    function validateTaskProjectId() {
+        return async (req, res, next) => {
+            try {
+              const taskProjects = await db.getTaskProjectsId(req.params.id);
+        
+              if (taskProjects) {
+                req.taskProjects = taskProjects;
+                next();
+              } else {
+                res.status(404).json({
+                  message: "Invalid task project id",
+                });
+              }
+            } catch (error) {
+              console.log(error);
+              res.status(500).json({
+                message: "Error retrieving the tasks projects",
+              });
+            }
+          };
+        }
+
     function validateTask() {
         return (req, res, next) => {
           if (Object.keys(req.body).length === 0) {
@@ -38,7 +60,10 @@ function validateTasksId() {
         };
       }
 
+    
+
 module.exports = {
     validateTask,
-    validateTasksId
+    validateTasksId,
+    validateTaskProjectId
 }
