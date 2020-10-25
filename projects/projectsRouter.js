@@ -69,6 +69,16 @@ router.post("/resources", validateResource(), async (req, res) => {
     } 
   });
 
+  // to add a resource to projects
+router.post("/projects/:id/resources", validateResource(), async (req, res, next) => {
+    try {
+      const resources = await db.insertResourcesToProjects(req.body);
+  
+      res.status(201).json(resources);
+    } catch (error) {
+      next(error);
+    } 
+  });
 
 
 module.exports = router

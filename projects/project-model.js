@@ -1,14 +1,25 @@
 const db = require('../data/config');
 
 // to get all projects
+// function getProjects() {
+//   return db('projects');
+// }
+
+// to get projects with resource
 function getProjects() {
-  return db('projects');
+return db('projects')
+    // .innerJoin("projects as p", "p.id", "pr.project_id")
+    // .innerJoin("resources as r", "r.id", "pr.resource_id")
+    // .orderBy("p.id")
+    // .select("p.*", "r.resource_name")
 }
 
 // to get a specific project by id
 function getProjectsById(id) {
-    return db("projects")
-    .where({ id })
+    return db("projects as p")
+    .select(["p.*"])
+
+    .where("p.id", id)
     .first();
 }
 
@@ -56,10 +67,10 @@ function insertResources(resources) {
     });
   }
 
-// to add resources to tasks
-function insertResourcesToTasks(resources) {
+// to add resources to projects
+function insertResourcesToProjects(resources) {
     return db('resources as r')
-    .innerJoin("tasks as t", "t.id", "r.task_id")
+    .innerJoin("projects as t", "t.id", "r.project_id")
     .insert(resources).then((ids) => {
       return getResourcesById(ids[0]);
     });
@@ -78,5 +89,5 @@ module.exports = {
   insertProjects,
   insertResources, 
   getResourcesFromProjects,
-  insertResourcesToTasks
+  insertResourcesToProjects
 };

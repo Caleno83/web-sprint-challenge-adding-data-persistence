@@ -1,7 +1,7 @@
 const db = require('../data/config');
 
 // to get all tasks
-function getTasks(id) {
+function getTasks() {
     return db('tasks as t')
     .innerJoin("projects as p", "p.id", "t.project_id")
     .select([ "t.id as task_id", "t.task_description", "t.task_notes",  "t.completed", "p.project_name", "p.project_description"])
